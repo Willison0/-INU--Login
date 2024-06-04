@@ -1,14 +1,9 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthPayloadDto } from './dataTransferObject/auth.dto';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalGuard } from './guards/local.guard';
+import { Request } from 'express';
+import { JwtAuthGuard } from './guards/jwt.guard';
+import { RegisterPayloadDto } from './dataTransferObject/auth.dto';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -17,10 +12,21 @@ export class AuthenticationController {
   @Post('login')
   // Calls the strategy
   @UseGuards(LocalGuard)
-  login(@Body() authPayload: AuthPayloadDto) {
-    const user = this.authService.validateUser(authPayload);
+  login(@Req() req: Request) {
+    return req.user;
+  }
 
-    if (!user) throw new HttpException('Invalid Credentials', 401);
-    else return user;
+  @Post('register')
+  @UseGuards(LocalGuard)
+  async register(@Req() registerPayload: RegisterPayloadDto) {
+    // TODO Pushing data to database.
+  }
+
+  @Get('status')
+  @UseGuards(JwtAuthGuard)
+  status(@Req() req: Request) {
+    console.log('AuthController status method');
+    console.log(req.user);
+    return req.user;
   }
 }

@@ -1,13 +1,12 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
-@Injectable()
-export class LocalGuard extends AuthGuard('local') {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('This is code from LocalGuard, which comes first');
+    console.log('Guarda de JWT');
     return super.canActivate(context);
   }
 }
