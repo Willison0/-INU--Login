@@ -1,36 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { LoginPayloadDto } from './dataTransferObject/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaClient } from '@prisma/client/edge';
+const prisma = new PrismaClient();
 
-const fakeUsers = [
-    {
-        id: 1,
-        username: 'anson',
-        password: 'password'
-    },
-    {
-        id: 2,
-        username: 'jack',
-        password: 'password123'
-    }
-]
+const fakeUsers = prisma.users;
 @Injectable()
 export class AuthenticationService {
-    constructor(private jwtService: JwtService) {
+  constructor(private jwtService: JwtService) {}
 
+  async validateUser({ username, password }: LoginPayloadDto) {
+    const foundUser = await fakeUsers.findFirst({
+      where: {
+        user_name: username,
+      },
+    });
+    if (!foundUser) {
+      return null;
     }
 
-    validateUser({username, password}: LoginPayloadDto){
-        const findUser = fakeUsers.find(
-            (user) => user.username === username
-         )
-         if (!findUser) {
-            return null
-         }
-
-         if (password === findUser.password) {
-            const {password, ...user } = findUser;
-            return this.jwtService.sign(user)
-         }
+    if (password === foundUser.password) {
+      const { password, ...user } = foundUser;
+      return this.jwtService.sign(user);
     }
+  }
 }

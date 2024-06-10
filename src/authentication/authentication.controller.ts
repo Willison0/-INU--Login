@@ -4,6 +4,8 @@ import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { RegisterPayloadDto } from './dataTransferObject/auth.dto';
+import { PrismaClient } from '@prisma/client/edge';
+const prisma = new PrismaClient();
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -17,9 +19,24 @@ export class AuthenticationController {
   }
 
   @Post('register')
-  @UseGuards(LocalGuard)
+  // @UseGuards(LocalGuard)
   async register(@Req() registerPayload: RegisterPayloadDto) {
     // TODO Pushing data to database.
+    async validateRegister({ username, password }: registerPayload) {
+    //   const foundUser = await fakeUsers.findFirst({
+    //     where: {
+    //       user_name: username,
+    //     },
+    //   });
+    //   if (!foundUser) {
+    //     return null;
+    //   }
+  
+    //   if (password === foundUser.password) {
+    //     const { password, ...user } = foundUser;
+    //     return this.jwtService.sign(user);
+    //   }
+    }
   }
 
   @Get('status')
