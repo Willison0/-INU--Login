@@ -9,12 +9,21 @@ export class Social {
 }
 
 export class RegisterPayloadDto {
+  fName: string;
+  sName: string;
+  fSurname: string;
+  sSurname: string;
+  gender: number;
+  birthdate: Date;
+  nationalId: number;
+  country: number;
+  detailedAddress: string;
   username: string;
   // TODO Password strength validation
   password: string;
   // TODO Length validation
   national_id: number; // 30412405
-  nationality: string;
+  nationality: number;
   // Johndoe@gmail.com
   email: string;
   // yyyy-mm-ddThh:mm:ss:fffZ

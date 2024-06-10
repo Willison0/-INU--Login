@@ -80,3 +80,8 @@ model users {
   @@index([idpersonas], map: "fk_users_personas1_idx")
   @@index([idtipo_usuario], map: "fk_users_tipo_usuario1_idx")
 }
+
+model paises {
+  idpais Int    @id @default(autoincrement())
+  Nombre String @db.VarChar(30)
+}
